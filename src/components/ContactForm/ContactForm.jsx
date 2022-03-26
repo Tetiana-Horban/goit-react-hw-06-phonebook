@@ -1,23 +1,26 @@
 import { useState } from 'react';
-import PropTypes from 'prop-types';
+import Notiflix from 'notiflix';
+import { addContact } from 'redux/contacts/actions';
 import { Form, Label, Text, Input, ButtonSubmit } from './ContactForm.styled';
+import { useDispatch, useSelector } from 'react-redux';
+import { getContacts } from 'redux/contacts/selectors';
 
-const ContactForm = ({ onSubmit }) => {
+const ContactForm = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
+  const contacts = useSelector(getContacts);
+  const dispatch = useDispatch();
+
   const handleChange = event => {
     const { name, value } = event.target;
-
     switch (name) {
       case 'name':
         setName(value);
         break;
-
       case 'number':
         setNumber(value);
         break;
-
       default:
         return;
     }
@@ -29,7 +32,15 @@ const ContactForm = ({ onSubmit }) => {
   };
   const handleSubmit = event => {
     event.preventDefault();
-    onSubmit({ name, number });
+    if (
+      contacts.find(
+        contact => contact.name.toLowerCase() === name.toLowerCase()
+      )
+    ) {
+      Notiflix.Notify.warning(`${name} is already in contacts`);
+    } else {
+      dispatch(addContact({ name, number }));
+    }
     resetForm();
   };
 
@@ -64,10 +75,6 @@ const ContactForm = ({ onSubmit }) => {
       <ButtonSubmit type="submit">Add contact</ButtonSubmit>
     </Form>
   );
-};
-
-ContactForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
 };
 
 export default ContactForm;

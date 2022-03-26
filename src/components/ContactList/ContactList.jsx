@@ -1,25 +1,19 @@
+import { useSelector } from 'react-redux';
+import { getRenderContacts } from 'redux/contacts/selectors';
 import ContactListItem from '../ContactListItem/ContactListItem';
-import PropTypes from 'prop-types';
 import { ContactWrapper, ContactItem } from './ContactList.styled';
 
-const ContactsList = ({ contacts, onDeleteContact }) => {
+const ContactsList = () => {
+  const contacts = useSelector(getRenderContacts);
   return (
     <ContactWrapper>
       {contacts.map(({ id, name, number }) => (
         <ContactItem key={id}>
-          <ContactListItem
-            id={id}
-            name={name}
-            number={number}
-            onDeleteContact={onDeleteContact}
-          />
+          <ContactListItem id={id} name={name} number={number} />
         </ContactItem>
       ))}
     </ContactWrapper>
   );
 };
 
-ContactsList.propTypes = {
-  contacts: PropTypes.array.isRequired,
-};
 export default ContactsList;

@@ -1,7 +1,10 @@
-import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { changeFilter } from 'redux/contacts/actions';
 import { FilterInput, TextFilter, InputFilter } from './Filter.styled';
 
-const Filter = ({ onChange }) => {
+const Filter = () => {
+  const dispatch = useDispatch();
+  const onChange = event => dispatch(changeFilter(event.target.value));
   return (
     <FilterInput>
       <label>
@@ -13,7 +16,4 @@ const Filter = ({ onChange }) => {
   );
 };
 
-Filter.propTypes = {
-  onChange: PropTypes.func.isRequired,
-};
 export default Filter;
